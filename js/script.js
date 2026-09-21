@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       desc: 'From the threads that become everyday life to the machines that shape industries, our work spans generations of engineering. Across textiles, machinery, foundry and aerospace, we turn precision into progress.',
     },
     {
-      title: 'We keep the world in motion, one thread at a time',
+      title: 'We keep the world spinning, thread by thread',
       desc: 'For decades, we have helped textile manufacturers turn fibre into possibility through machines built for precision, consistency and scale. Every spindle, every thread, every revolution carries forward a legacy of engineering that began in Coimbatore.',
     },
     {
