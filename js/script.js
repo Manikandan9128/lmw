@@ -190,19 +190,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const timelineBarFill = document.querySelector('.timeline__bar-fill');
 
   if (timelinePin && timelineTrack && timelineItems.length && window.matchMedia('(min-width: 901px)').matches) {
-    // Sticky-pin pattern: the wrapper is made ITEM_COUNT viewport-heights tall
-    // and the track inside it is position:sticky. This lets native/Lenis scroll
-    // drive card progression directly, so it can never "skip" the section on a
-    // large wheel delta and always unpins smoothly in whichever direction the
-    // user keeps scrolling — no manual preventDefault/scrollTo jump needed.
+    // Sticky-pin pattern: the wrapper is made ITEM_COUNT viewport-heights tall and
+    // the track inside it is position:sticky (see .timeline in style.css), so the
+    // section background/heading/quote/bar physically cannot move while pinned —
+    // CSS sticky itself caps the track's position, it can never be scrolled past
+    // in one jump. Within that pinned dwell, one wheel gesture steps exactly one
+    // card; only .timeline__track translates horizontally, never the page.
     const ITEM_COUNT = timelineItems.length;
     const ITEM_STEP = 770; // 650px card + 120px gap
-    let activeIndex = -1;
+    const STICKY_TOP = 78; // must match .timeline { top: ... } in style.css
+    const TRANSITION_MS = 700;
+
+    let activeIndex = 0;
+    let isAnimating = false;
 
     timelinePin.style.height = `${ITEM_COUNT * 100}vh`;
 
     const render = (index) => {
-      if (index === activeIndex) return;
       activeIndex = index;
       timelineTrack.style.transform = `translateX(-${activeIndex * ITEM_STEP}px)`;
       timelineItems.forEach((item, i) => {
@@ -211,22 +215,37 @@ document.addEventListener('DOMContentLoaded', () => {
       timelineBarFill.style.width = `${((activeIndex + 1) / ITEM_COUNT) * 100}%`;
     };
 
-    const updateFromScroll = () => {
+    const isPinned = () => {
       const rect = timelinePin.getBoundingClientRect();
-      const scrollable = rect.height - window.innerHeight;
-      if (scrollable <= 0) return;
-      const progress = Math.min(Math.max(-rect.top / scrollable, 0), 1);
-      const index = Math.min(ITEM_COUNT - 1, Math.floor(progress * ITEM_COUNT));
-      render(index);
+      return rect.top <= STICKY_TOP + 1 && rect.bottom > window.innerHeight;
     };
 
-    lenis.on('scroll', updateFromScroll);
-    // Also listen natively: Lenis only fires 'scroll' for scrolls it drives (wheel/touch).
-    // Programmatic scrollTo, keyboard paging and scrollbar drags move the page without
-    // going through Lenis, and would otherwise leave the pinned card stuck on stale state.
-    window.addEventListener('scroll', updateFromScroll, { passive: true });
-    window.addEventListener('resize', updateFromScroll);
-    updateFromScroll();
+    window.addEventListener(
+      'wheel',
+      (e) => {
+        if (!isPinned()) return;
+
+        if (isAnimating) {
+          e.preventDefault();
+          return;
+        }
+
+        const goingDown = e.deltaY > 0;
+
+        if (goingDown && activeIndex === ITEM_COUNT - 1) return; // release: let scroll continue to next section
+        if (!goingDown && activeIndex === 0) return; // release: let scroll continue to previous section
+
+        e.preventDefault();
+        isAnimating = true;
+        render(activeIndex + (goingDown ? 1 : -1));
+        window.setTimeout(() => {
+          isAnimating = false;
+        }, TRANSITION_MS);
+      },
+      { passive: false }
+    );
+
+    render(0);
   }
 
   document.querySelectorAll('.nav-item').forEach((navItem) => {
