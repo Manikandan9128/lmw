@@ -11,8 +11,9 @@
 </head>
 <body>
 
+<div class="site-header-stack">
 <header class="site-header">
-  <img class="site-header__wordmark" src="assets/logos/lmw-wordmark-hero.svg" alt="">
+  <div class="site-header__wordmark-clip"><img class="site-header__wordmark" src="assets/logos/lmw-wordmark-hero.svg" alt=""></div>
   <div class="site-header__container">
     <div class="site-header__top">
       <img class="site-header__logo" src="assets/logos/lmw-logo.svg" alt="LMW">
@@ -34,11 +35,24 @@
       <a href="#investors">Investors</a>
       <a href="#sustainability">Sustainability</a>
       <a href="#csr">CSR</a>
-      <a href="#careers">Careers</a>
+      <a href="#contact">Careers</a>
+      <a href="#contact">Contact Us</a>
+    </nav>
+  </div>
+  <div class="site-header__compact-row">
+    <img class="site-header__compact-logo" src="assets/logos/lmw-wordmark-small.svg" alt="LMW">
+    <nav class="site-header__compact-nav">
+      <a href="#about">About</a>
+      <a href="#businesses">Our Businesses</a>
+      <a href="#investors">Investors</a>
+      <a href="#sustainability">Sustainability</a>
+      <a href="#csr">CSR</a>
+      <a href="#contact">Careers</a>
       <a href="#contact">Contact Us</a>
     </nav>
   </div>
 </header>
+</div>
 
 <main>
 
@@ -52,8 +66,8 @@
     </div>
     <div class="hero__container">
       <div class="hero__content">
-        <h1 class="hero__title">We help our partners prosper</h1>
-        <p class="hero__desc">Sixty-three years ago in Coimbatore, a family began building machines on one condition: everyone who touched them should prosper. This is that promise, kept.</p>
+        <h1 class="hero__title">We build what moves the world forward</h1>
+        <p class="hero__desc">From the threads that become everyday life to the machines that shape industries, our work spans generations of engineering. Across textiles, machinery, foundry and aerospace, we turn precision into progress.</p>
       </div>
       <div class="hero__dots">
         <button class="hero__dot" type="button" aria-label="Slide 1"><span class="hero__dot-fill"></span></button>
@@ -65,7 +79,7 @@
     </div>
   </section>
 
-  <section class="one-in-four">
+  <section class="one-in-four" id="businesses">
     <div class="one-in-four__row">
       <div class="one-in-four__image" style="background-image:url('assets/images/one-in-four-bg.png')"></div>
       <div class="one-in-four__text">
@@ -89,27 +103,39 @@
       <h2 class="heading-lg">The five promises we run this group by</h2>
       <div class="five-promises__content">
         <div class="five-promises__visual">
-          <div class="five-promises__image" style="background-image:url('assets/images/five-promises-bg.png')"></div>
+          <div class="five-promises__image" data-promise-image style="background-image:url('assets/images/five-promises-bg.png')"></div>
           <div class="five-promises__card">
             <p class="five-promises__card-title">To our customers</p>
-            <p class="body-text">Our machines are bought once and worked for decades — spinning lines, machining centres, castings in service. We engineer and support them for that whole life, not for the warranty period.</p>
+            <p class="body-text five-promises__card-desc">Our machines are bought once and worked for decades — spinning lines, machining centres, castings in service. We engineer and support them for that whole life, not for the warranty period.</p>
           </div>
         </div>
         <div class="five-promises__tabs">
-          <div class="five-promises__tab five-promises__tab--active">
+          <button class="five-promises__tab five-promises__tab--active" type="button" data-index="0">
             <p>Our customers</p>
             <img src="assets/icons/icon-ellipse.svg" alt="">
-          </div>
-          <p class="five-promises__tab">Our owners</p>
-          <p class="five-promises__tab">Our ecosystem</p>
-          <p class="five-promises__tab">Our people</p>
-          <p class="five-promises__tab">Our planet</p>
+          </button>
+          <button class="five-promises__tab" type="button" data-index="1">
+            <p>Our owners</p>
+            <img src="assets/icons/icon-ellipse.svg" alt="">
+          </button>
+          <button class="five-promises__tab" type="button" data-index="2">
+            <p>Our ecosystem</p>
+            <img src="assets/icons/icon-ellipse.svg" alt="">
+          </button>
+          <button class="five-promises__tab" type="button" data-index="3">
+            <p>Our people</p>
+            <img src="assets/icons/icon-ellipse.svg" alt="">
+          </button>
+          <button class="five-promises__tab" type="button" data-index="4">
+            <p>Our planet</p>
+            <img src="assets/icons/icon-ellipse.svg" alt="">
+          </button>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="stats">
+  <section class="stats" id="investors">
    <div class="stats__container">
     <div class="stats__main">
       <div class="stats__intro">
@@ -153,7 +179,8 @@
       <p class="customers__quote-text">"Your machines must make money for <span class="text-accent">twenty-five years.</span>"</p>
       <p class="body-text body-text--light">Every machine we sell will outlive the plans of the person who bought it. Markets turn, fibres change, technology moves on - the machine has to simply keep working.</p>
     </div>
-    <div class="timeline">
+    <div class="timeline-pin" data-timeline-pin>
+     <div class="timeline" data-timeline>
       <div class="timeline__track">
         <div class="timeline__item">
           <div class="timeline__text">
@@ -165,18 +192,39 @@
           </div>
           <div class="timeline__image" style="background-image:url('assets/images/customers-1962.png')"></div>
         </div>
-        <div class="timeline__item timeline__item--dim">
+        <div class="timeline__item">
           <div class="timeline__text">
             <p class="timeline__year">1968</p>
             <div class="timeline__heading-group">
               <h3 class="timeline__title">Our own iron</h3>
-              <p class="body-text body-text--light">We mastered metallurgy and raised our own foundry, so the metal in our</p>
+              <p class="body-text body-text--light">We mastered metallurgy and raised our own foundry, so the metal in our machines would meet our own standard.</p>
             </div>
           </div>
           <div class="timeline__image" style="background-image:url('assets/images/customers-1968.png')"></div>
         </div>
+        <div class="timeline__item">
+          <div class="timeline__text">
+            <p class="timeline__year">1988</p>
+            <div class="timeline__heading-group">
+              <h3 class="timeline__title">Machines that make machines</h3>
+              <p class="body-text body-text--light">We built our own CNC machine tools - the precision behind every LMW machine, made in-house.</p>
+            </div>
+          </div>
+          <div class="timeline__image" style="background-image:url('assets/images/customers-1988.png')"></div>
+        </div>
+        <div class="timeline__item">
+          <div class="timeline__text">
+            <p class="timeline__year">2010</p>
+            <div class="timeline__heading-group">
+              <h3 class="timeline__title">Proof, in orbit</h3>
+              <p class="body-text body-text--light">We carried that same precision into aerospace. Today, parts we machine fly on launch vehicles.</p>
+            </div>
+          </div>
+          <div class="timeline__image" style="background-image:url('assets/images/customers-2010.png')"></div>
+        </div>
       </div>
       <div class="timeline__bar"><span class="timeline__bar-fill"></span></div>
+     </div>
     </div>
    </div>
   </section>
@@ -205,7 +253,7 @@
    </div>
   </section>
 
-  <section class="founders">
+  <section class="founders" id="about">
    <div class="founders__container">
     <div class="founders__intro">
       <h2 class="heading-lg heading-center">Growth, without a dollar of leverage</h2>
@@ -284,7 +332,7 @@
    </div>
   </section>
 
-  <section class="charity">
+  <section class="charity" id="csr">
    <div class="charity__container">
     <div class="charity__intro">
       <h2 class="heading-lg heading-white heading-center">Some of the best work we do never ships.</h2>
@@ -307,7 +355,7 @@
    </div>
   </section>
 
-  <section class="sustainability" style="background-image:url('assets/images/sustainability-bg.png')">
+  <section class="sustainability" id="sustainability" style="background-image:url('assets/images/sustainability-bg.png')">
    <div class="sustainability__container">
     <div class="sustainability__intro">
       <h2 class="heading-hero heading-white">Growth that gives back more than it takes</h2>
@@ -340,7 +388,7 @@
 
 </main>
 
-<footer class="site-footer">
+<footer class="site-footer" id="contact">
  <div class="site-footer__container">
   <div class="site-footer__top">
     <img src="assets/logos/lmw-logo-footer.svg" alt="LMW" class="site-footer__logo">
@@ -388,6 +436,7 @@
  <img src="assets/logos/lmw-wordmark-footer.svg" alt="" class="site-footer__wordmark">
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <script src="js/script.js"></script>
 </body>
 </html>

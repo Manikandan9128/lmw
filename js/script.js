@@ -1,10 +1,37 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const lenis = new Lenis();
+
+  const raf = (time) => {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  };
+  requestAnimationFrame(raf);
+
+  const headerStack = document.querySelector('.site-header-stack');
+  if (headerStack) {
+    const COMPACT_THRESHOLD = 40;
+    let ticking = false;
+
+    const updateCompact = () => {
+      headerStack.classList.toggle('is-compact', window.scrollY > COMPACT_THRESHOLD);
+      ticking = false;
+    };
+
+    updateCompact();
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateCompact);
+        ticking = true;
+      }
+    });
+  }
+
   document.querySelectorAll('a[href^="#"]').forEach((link) => {
     link.addEventListener('click', (e) => {
       const target = document.querySelector(link.getAttribute('href'));
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth' });
+        lenis.scrollTo(target);
       }
     });
   });
@@ -12,6 +39,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const heroSlides = document.querySelectorAll('.hero__slide');
   const heroDots = document.querySelectorAll('.hero__dot');
   const heroFills = document.querySelectorAll('.hero__dot-fill');
+  const heroTitle = document.querySelector('.hero__title');
+  const heroDesc = document.querySelector('.hero__desc');
+
+  const HERO_CONTENT = [
+    {
+      title: 'We build what moves the world forward',
+      desc: 'From the threads that become everyday life to the machines that shape industries, our work spans generations of engineering. Across textiles, machinery, foundry and aerospace, we turn precision into progress.',
+    },
+    {
+      title: 'We keep the world in motion, one thread at a time',
+      desc: 'For decades, we have helped textile manufacturers turn fibre into possibility through machines built for precision, consistency and scale. Every spindle, every thread, every revolution carries forward a legacy of engineering that began in Coimbatore.',
+    },
+    {
+      title: 'We shape the machines behind tomorrow',
+      desc: 'Precision begins where ideas meet metal. From advanced machining centres to intelligent manufacturing systems, we engineer the tools that help industries create with greater accuracy, speed and confidence.',
+    },
+    {
+      title: 'We forge strength from the heat of creation',
+      desc: 'Before a machine takes shape, there is fire, metal and the hands that know how to transform them. Our foundry capabilities bring together generations of metallurgical expertise and modern engineering to create components built to endure.',
+    },
+    {
+      title: 'We reach beyond the boundaries of earth',
+      desc: "The demands of aerospace leave no room for compromise. From complex structures to mission-critical components, our engineering capabilities carry the precision of LMW into one of the world's most demanding frontiers.",
+    },
+  ];
 
   if (heroSlides.length > 1 && heroDots.length === heroSlides.length) {
     const SLIDE_DURATION = 15000;
@@ -24,6 +76,16 @@ document.addEventListener('DOMContentLoaded', () => {
       heroFills.forEach((fill, i) => {
         fill.style.width = i < index ? '100%' : '0%';
       });
+      if (heroTitle && heroDesc && HERO_CONTENT[index]) {
+        heroTitle.style.opacity = '0';
+        heroDesc.style.opacity = '0';
+        window.setTimeout(() => {
+          heroTitle.textContent = HERO_CONTENT[index].title;
+          heroDesc.textContent = HERO_CONTENT[index].desc;
+          heroTitle.style.opacity = '1';
+          heroDesc.style.opacity = '1';
+        }, 200);
+      }
       current = index;
       startTime = performance.now();
     };
@@ -45,8 +107,143 @@ document.addEventListener('DOMContentLoaded', () => {
     requestAnimationFrame(tick);
   }
 
+  const promiseTabs = document.querySelectorAll('.five-promises__tab');
+  const promiseTitle = document.querySelector('.five-promises__card-title');
+  const promiseDesc = document.querySelector('.five-promises__card-desc');
+  const promiseImage = document.querySelector('[data-promise-image]');
+
+  if (promiseTabs.length && promiseTitle && promiseDesc && promiseImage) {
+    const PROMISES = [
+      {
+        title: 'To our customers',
+        desc: 'Our machines are bought once and worked for decades — spinning lines, machining centres, castings in service. We engineer and support them for that whole life, not for the warranty period.',
+        image: 'assets/images/five-promises-bg.png',
+      },
+      {
+        title: 'To our owners',
+        desc: "Every expansion in sixty-three years has been paid for by the business itself. Holding LMW has never meant holding a lender's risk.",
+        image: 'assets/images/five-promises-owners.png',
+      },
+      {
+        title: 'To our ecosystem',
+        desc: 'The suppliers, technology partners and allied enterprises around us are part of how we keep our word on quality. We treat them accordingly.',
+        image: 'assets/images/five-promises-ecosystem.png',
+      },
+      {
+        title: 'To our people & communities',
+        desc: 'Careers that run across generations, institutes our founders built, and community work funded beyond what the law requires.',
+        image: 'assets/images/five-promises-people.png',
+      },
+      {
+        title: 'To our planet',
+        desc: 'Lower carbon, our own renewable power, and machines built for the recycled fibre the industry is moving toward.',
+        image: 'assets/images/five-promises-planet.png',
+      },
+    ];
+    const PROMISE_DURATION = 15000;
+    let promiseCurrent = 0;
+    let promiseTimer = null;
+
+    const setPromise = (index) => {
+      promiseCurrent = index;
+      promiseTabs.forEach((tab, i) => {
+        tab.classList.toggle('five-promises__tab--active', i === index);
+      });
+      promiseTitle.style.opacity = '0';
+      promiseDesc.style.opacity = '0';
+      promiseImage.style.opacity = '0';
+      window.setTimeout(() => {
+        promiseTitle.textContent = PROMISES[index].title;
+        promiseDesc.textContent = PROMISES[index].desc;
+        promiseImage.style.backgroundImage = `url('${PROMISES[index].image}')`;
+        promiseTitle.style.opacity = '1';
+        promiseDesc.style.opacity = '1';
+        promiseImage.style.opacity = '1';
+      }, 200);
+    };
+
+    const restartPromiseTimer = () => {
+      if (promiseTimer) clearInterval(promiseTimer);
+      promiseTimer = setInterval(() => {
+        setPromise((promiseCurrent + 1) % PROMISES.length);
+      }, PROMISE_DURATION);
+    };
+
+    promiseTabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        setPromise(i);
+        restartPromiseTimer();
+      });
+    });
+
+    restartPromiseTimer();
+  }
+
   document.querySelectorAll('.commitment-card').forEach((card) => {
     card.addEventListener('mousedown', (e) => e.preventDefault());
     card.addEventListener('mouseleave', () => card.blur());
+  });
+
+  const timelinePin = document.querySelector('[data-timeline-pin]');
+  const timelineTrack = document.querySelector('.timeline__track');
+  const timelineItems = document.querySelectorAll('.timeline__item');
+  const timelineBarFill = document.querySelector('.timeline__bar-fill');
+
+  if (timelinePin && timelineTrack && timelineItems.length && window.matchMedia('(min-width: 901px)').matches) {
+    // Sticky-pin pattern: the wrapper is made ITEM_COUNT viewport-heights tall
+    // and the track inside it is position:sticky. This lets native/Lenis scroll
+    // drive card progression directly, so it can never "skip" the section on a
+    // large wheel delta and always unpins smoothly in whichever direction the
+    // user keeps scrolling — no manual preventDefault/scrollTo jump needed.
+    const ITEM_COUNT = timelineItems.length;
+    const ITEM_STEP = 770; // 650px card + 120px gap
+    let activeIndex = -1;
+
+    timelinePin.style.height = `${ITEM_COUNT * 100}vh`;
+
+    const render = (index) => {
+      if (index === activeIndex) return;
+      activeIndex = index;
+      timelineTrack.style.transform = `translateX(-${activeIndex * ITEM_STEP}px)`;
+      timelineItems.forEach((item, i) => {
+        item.classList.toggle('timeline__item--dim', i !== activeIndex);
+      });
+      timelineBarFill.style.width = `${((activeIndex + 1) / ITEM_COUNT) * 100}%`;
+    };
+
+    const updateFromScroll = () => {
+      const rect = timelinePin.getBoundingClientRect();
+      const scrollable = rect.height - window.innerHeight;
+      if (scrollable <= 0) return;
+      const progress = Math.min(Math.max(-rect.top / scrollable, 0), 1);
+      const index = Math.min(ITEM_COUNT - 1, Math.floor(progress * ITEM_COUNT));
+      render(index);
+    };
+
+    lenis.on('scroll', updateFromScroll);
+    // Also listen natively: Lenis only fires 'scroll' for scrolls it drives (wheel/touch).
+    // Programmatic scrollTo, keyboard paging and scrollbar drags move the page without
+    // going through Lenis, and would otherwise leave the pinned card stuck on stale state.
+    window.addEventListener('scroll', updateFromScroll, { passive: true });
+    window.addEventListener('resize', updateFromScroll);
+    updateFromScroll();
+  }
+
+  document.querySelectorAll('.nav-item').forEach((navItem) => {
+    const trigger = navItem.querySelector('.nav-item__trigger');
+    if (!trigger) return;
+
+    trigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isOpen = navItem.classList.toggle('nav-item--open');
+      trigger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!navItem.contains(e.target)) {
+        navItem.classList.remove('nav-item--open');
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
   });
 });
